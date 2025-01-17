@@ -56,6 +56,32 @@ Built using **Spring Boot**, this project demonstrates fundamental REST API prin
 
 ---
 
+5. **To  restitue with  poweshell a car on  my Windows** :
+```PowerShell
+ Invoke-RestMethod -Uri "http://localhost:8080/cars/11AA22?rent=true" -Method Put -Headers @{"Content-Type"="application/json"} -Body '{"begin":"4/11/2024","end":"20/11/2024"}'
+
+PS C:\Users\MLSD> if ($?) {
+>>     "The command succeeded."
+>> } else {
+>>     "The command failed."
+>> }
+```
+6. **To restitue a car on Postman**:
+```
+Méthode HTTP : PUT
+URL : http://localhost:8080/cars/11AA22?rent=true
+Headers :
+Content-Type: application/json
+Body :
+Sélectionnez l'option raw : Entrez le contenu suivant :
+ {
+  "begin": "4/11/2024",
+  "end": "20/11/2024"
+}
+
+```
+
+
 ## How to Run
 
 1. Clone the repository.

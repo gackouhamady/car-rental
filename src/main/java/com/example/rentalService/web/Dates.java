@@ -1,13 +1,9 @@
 package com.example.rentalService.web;
 
 public class Dates {
-    public String begin;
-    public String end;
 
-
-    public String getEnd() {
-        return end;
-    }
+    String begin;
+    String end;
 
     public String getBegin() {
         return begin;
@@ -17,7 +13,19 @@ public class Dates {
         this.begin = begin;
     }
 
+    public String getEnd() {
+        return end;
+    }
+
     public void setEnd(String end) {
         this.end = end;
+    }
+
+    @Override
+    public String toString() {
+        return "Dates{" +
+                "begin='" + begin + '\'' +
+                ", end='" + end + '\'' +
+                '}';
     }
 }
