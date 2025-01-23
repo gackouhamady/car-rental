@@ -34,7 +34,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       # Build the project
-      - name: car-rental
+      - name: Build the project
         run: ./gradlew build
 
       # Run tests
