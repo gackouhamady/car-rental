@@ -91,13 +91,6 @@ Sélectionnez l'option raw : Entrez le contenu suivant :
 
  
 
- 
-
-## Contributing
-
-Feel free to fork this repository and contribute by submitting pull requests. Suggestions and improvements are always welcome!
-
----
 
 ## Copy Rights : 
 
