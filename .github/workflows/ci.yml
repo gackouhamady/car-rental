@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - main
-#### Just  example
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '21'
-          distribution: 'temurin' # Specify the Java distribution
+          distribution: 'temurin'
 
       # Ensure gradlew has execute permissions
       - name: Make gradlew executable
@@ -41,7 +41,7 @@ jobs:
       - name: Build the project
         run: ./gradlew build
 
-      # Run tests
+      # Run tests locally
       - name: Run tests
         run: ./gradlew test
 
@@ -50,21 +50,23 @@ jobs:
         run: |
           docker build -t my-java-app .
 
-
       # Run Docker container
       - name: Run Docker container
         run: |
           docker run -d --name my-java-app-container my-java-app
-          sleep 5  # Attendre quelques secondes pour que le conteneur démarre correctement
-          docker ps  # Vérifier que le conteneur est en cours d'exécution
+          sleep 5  # Wait for the container to start
 
-      # Optionally, run tests inside Docker container
+      # Check if the Docker container is running
+      - name: Verify Docker container status
+        run: |
+          docker ps --filter "name=my-java-app-container" --filter "status=running" --format "{{.Names}}" | grep -w "my-java-app-container"
+
+      # Run tests inside Docker container
       - name: Run tests in Docker container
         run: |
-          docker exec my-java-app-container /app/gradlew test
-      
+          docker exec my-java-app-container ./gradlew test
 
-        # Stop and remove the container
+      # Stop and remove the container
       - name: Stop and remove Docker container
         run: |
           docker stop my-java-app-container
