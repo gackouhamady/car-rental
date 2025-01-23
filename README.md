@@ -89,15 +89,9 @@ Sélectionnez l'option raw : Entrez le contenu suivant :
 3. Run the `main` method in the `Application.java` file.
 4. Access the API via `http://localhost:8080` using tools like Postman or a web browser.
 
----
+ 
 
-## Future Improvements
-
-- Add authentication and authorization for API endpoints.
-- Implement input validation for car data.
-- Enhance error handling to return more user-friendly messages.
-
----
+ 
 
 ## Contributing
 
