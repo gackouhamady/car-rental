@@ -22,7 +22,11 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '21'
-          distribution: 'temurin' # Specify the Java distribution (e.g., temurin)
+          distribution: 'temurin' # Specify the Java distribution
+
+      # Ensure gradlew has execute permissions
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 
       # Cache Gradle dependencies
       - name: Cache Gradle dependencies
@@ -38,5 +42,5 @@ jobs:
         run: ./gradlew build
 
       # Run tests
-      - name: Run test
+      - name: Run tests
         run: ./gradlew test
