@@ -50,17 +50,21 @@ jobs:
         run: |
           docker build -t my-java-app .
 
+
       # Run Docker container
       - name: Run Docker container
         run: |
           docker run -d --name my-java-app-container my-java-app
+          sleep 5  # Attendre quelques secondes pour que le conteneur démarre correctement
+          docker ps  # Vérifier que le conteneur est en cours d'exécution
 
       # Optionally, run tests inside Docker container
       - name: Run tests in Docker container
         run: |
           docker exec my-java-app-container /app/gradlew test
+      
 
-      # Stop and remove the container
+        # Stop and remove the container
       - name: Stop and remove Docker container
         run: |
           docker stop my-java-app-container

@@ -10,5 +10,5 @@ COPY . /app
 # Donner les permissions d'exécution à gradlew
 RUN chmod +x /app/gradlew
 
-# Exécuter gradlew lors du lancement du conteneur (optionnel)
-ENTRYPOINT ["./gradlew"]
+# Exécuter gradlew avec un argument qui garde le conteneur actif (par exemple, démarrer un serveur ou une tâche longue)
+ENTRYPOINT ["./gradlew", "build"]
