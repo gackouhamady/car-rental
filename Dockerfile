@@ -1,5 +1,12 @@
 FROM openjdk:21-oracle
-VOLUME /tmp
-EXPOSE 8080
-ADD ./build/libs/rentalService-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+
+
+WORKDIR /car-rental
+
+COPY . /app
+
+
+RUN chmod +x /app/gradlew
+
+# Définir le point d'entrée (facultatif, mais vous pouvez l'utiliser pour démarrer l'application)
+ENTRYPOINT ["./gradlew"]

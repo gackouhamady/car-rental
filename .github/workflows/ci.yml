@@ -58,7 +58,7 @@ jobs:
       # Optionally, run tests inside Docker container
       - name: Run tests in Docker container
         run: |
-          docker exec my-java-app-container ./gradlew test
+          docker exec my-java-app-container /app/gradlew test
 
       # Stop and remove the container
       - name: Stop and remove Docker container
