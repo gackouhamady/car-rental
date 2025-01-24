@@ -37,10 +37,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # Build the project
-      - name: Build the project
-        run: ./gradlew build
-
-      # Run tests
-      - name: Run tests
-        run: ./gradlew test
+      - name: Build and test
+        working-directory: rentalService
+        run: |
+          export SHELL=/bin/bash
+          ./gradlew build
+          - name: Docker images
+            working-directory: rentalService
+            run: |
+              export SHELL=/bin/bash
+              docker build -t rentalservice .
+              docker run -p 4000:8080 rentalservice
+              curl http://localhost:4000/cars
