@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '21'
-          distribution: 'temurin' # Specify the Java distribution
+          distribution: 'temurin'
 
       # Ensure gradlew has execute permissions
       - name: Make gradlew executable
@@ -37,14 +37,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      # Build and test using Gradle
       - name: Build and test
-        working-directory: car-rental
         run: |
           export SHELL=/bin/bash
           ./gradlew build
-          - name: Docker images
-            working-directory: car-rental
-            run: |
-              export SHELL=/bin/bash
-              docker build -t rentalservice .
-              docker images
+        working-directory: ./car-rental
+
+      # Build Docker image
+      - name: Docker images
+        run: |
+          export SHELL=/bin/bash
+          docker build -t rentalservice .
+          docker images
+        working-directory: ./car-rental
