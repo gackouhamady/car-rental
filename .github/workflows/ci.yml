@@ -38,12 +38,12 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build and test
-        working-directory: rentalService
+        working-directory: car-rental
         run: |
           export SHELL=/bin/bash
           ./gradlew build
           - name: Docker images
-            working-directory: rentalService
+            working-directory: car-rental
             run: |
               export SHELL=/bin/bash
               docker build -t rentalservice .
