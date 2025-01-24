@@ -39,15 +39,11 @@ jobs:
 
       # Build and test using Gradle
       - name: Build and test
-        run: |
-          export SHELL=/bin/bash
-          ./gradlew build
-        working-directory: ./car-rental
+        run: ./gradlew build
+        working-directory: car-rental
 
       # Build Docker image
       - name: Docker images
-        run: |
-          export SHELL=/bin/bash
-          docker build -t rentalservice .
-          docker images
-        working-directory: ./car-rental
+        run: docker build -t rentalservice .
+             docker images
+        working-directory: car-rental
