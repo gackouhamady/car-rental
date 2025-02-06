@@ -1,111 +1,153 @@
-# Car Rental Application
+# car-rental
 
-## Overview
-This project is a simple RESTful web service designed to manage a car rental system. The application provides endpoints to:
+## Car rental service
 
-1. Retrieve a list of unrented cars.
-2. Rent a car.
-3. Return a rented car.
-
-Built using **Spring Boot**, this project demonstrates fundamental REST API principles and microservice architecture in a lightweight implementation.
-
----
-
-## Features
-
-- **Unrented Cars Listing:** Get a list of all cars available for rental.
-- **Car Details:** Retrieve detailed information about a specific car, including its plate number, brand, price, and rental status.
-- **Rent or Return a Car:** Update the rental status of a car with a simple HTTP request.
-
----
-
-## Project Architecture
-
-- **Model Layer:** Defines the `Car` class, which includes attributes like `plateNumber`, `brand`, `price`, and `rented`.
-- **Repository Layer:** Manages an in-memory list of cars and provides methods to retrieve or update car data.
-- **Controller Layer:** Exposes RESTful endpoints to interact with the application.
-
----
-
-## API Endpoints
-
-### Base URL
-`http://localhost:8080`
-
-### Endpoints
-
-1. **Get Unrented Cars**
-   - **Method:** `GET`
-   - **Endpoint:** `/cars`
-   - **Description:** Retrieves a list of all unrented cars.
-
-2. **Get Car Details**
-   - **Method:** `GET`
-   - **Endpoint:** `/cars/{plateNumber}`
-   - **Description:** Retrieves details of a specific car by its plate number.
-
-3. **Rent a Car**
-   - **Method:** `PUT`
-   - **Endpoint:** `/cars/{plateNumber}?rent=true`
-   - **Description:** Updates the car status to rented.
-
-4. **Return a Car**
-   - **Method:** `PUT`
-   - **Endpoint:** `/cars/{plateNumber}?rent=false`
-   - **Description:** Updates the car status to available.
-
----
-
-5. **To  restitue with  poweshell a car on  my Windows** :
-```PowerShell
- Invoke-RestMethod -Uri "http://localhost:8080/cars/11AA22?rent=true" -Method Put -Headers @{"Content-Type"="application/json"} -Body '{"begin":"4/11/2024","end":"20/11/2024"}'
-
-PS C:\Users\MLSD> if ($?) {
->>     "The command succeeded."
->> } else {
->>     "The command failed."
->> }
-```
-6. **To restitue a car on Postman**:
-```
-Méthode HTTP : PUT
-URL : http://localhost:8080/cars/11AA22?rent=true
-Headers :
-Content-Type: application/json
-Body :
-Sélectionnez l'option raw : Entrez le contenu suivant :
- {
-  "begin": "4/11/2024",
-  "end": "20/11/2024"
-}
+https://github.com/charroux/st2scl/tree/main/rentalService
 
 ```
+curl --header "Content-Type: application/json" --request GET http://localhost:8080/cars
+```
 
+```
+curl --header "Content-Type: application/json" --request PUT --data '{"begin":"4/11/2024","end":"20/11/2024"}' 'http://localhost:8080/cars/11AA22?rent=true'
+```
 
-## How to Run
+### Launch a workflow when the code is updated
 
-1. Clone the repository.
-2. Open the project in your preferred IDE (Eclipse or IntelliJ IDEA).
-3. Run the `main` method in the `Application.java` file.
-4. Access the API via `http://localhost:8080` using tools like Postman or a web browser.
+The script is there: https://github.com/charroux/st2scl/blob/main/.github/workflows/acttions.yml
 
----
+Create a new branch:
+```
+git branch newcarservice
+```
+Move to the new branch:
+```
+git checkout newcarservice
+```
+Update the code and commit changes:
+```
+git commit -a -m "newcarservice"
+```
+Move to the main branch:
+```
+git checkout main
+```
+Push the changes to GitHub:
+```
+git push -u origin newcarservice
+```
+Create a Pull request on GitHub and follow the workflow.
 
-## Future Improvements
+Merge the branch on Github is everything is OK.
 
-- Add authentication and authorization for API endpoints.
-- Implement input validation for car data.
-- Enhance error handling to return more user-friendly messages.
+Then pull the new main version:
 
----
+```
+git checkout main
+```
+```
+git pull origin main
+```
 
-## Contributing
+If necessary delete the branch:
 
-Feel free to fork this repository and contribute by submitting pull requests. Suggestions and improvements are always welcome!
+```
+git branch -D newcarservice
+```
+```
+git push origin --delete newcarservice
+```
 
----
+### Docker
 
-## Copy Rights : 
+Create a Dockerfile in the code folder: https://github.com/charroux/st2scl/blob/main/rentalService/Dockerfile
 
-All Rights Reserved
- .
+Build a Docker image:
+```
+docker build -t rentalservice .      
+```
+Run the container:
+```
+docker run -p 4000:8080 rentalservice    
+```
+Then check in your browser:
+```
+http://localhost:4000/cars
+```
+
+### Publish the Docker image to the Docker Hub
+
+Tager l'image :
+```
+docker tag 4da2332370c7 votreIdDocherHub/rental:1
+```
+où le numéro est l'identifiant de l'image donné par docker images, et 1 est un numéro de version
+
+Se connecter au Docker Hub : 
+```
+docker login
+```
+
+Publier l'image :
+```
+docker push votreIdDocherHub/rental:1      
+```
+
+### Installer Minikube
+
+https://minikube.sigs.k8s.io/docs/start/?arch=%2Fmacos%2Fx86-64%2Fstable%2Fbinary+download
+
+### Démarrer Minikube
+```
+minikube start --driver=docker      
+```
+
+Combien de noeuds dans le cluster?
+```
+kubectl get nodes      
+```
+
+Dashboard pour inspecter le cluster : 
+```
+minikube dashboard
+```
+
+Déployer votre image Docker :
+```
+kubectl create deployment rentalservice --image=charroux/rentalservice:1      
+```
+Attention d'utiliser votre image.
+
+Vérifier que le procesus fonctionne bien :
+```
+kubectl get pods      
+```
+Scale :
+```
+kubectl scale --replicas=2 deployment/rentalservice          
+```     
+
+Tuer un pod pour constater son redémarrage:
+```
+kubectl delete pod rentalservice-5b746d6f65-t5m8v               
+```    
+Ajouter un load balancer :
+```
+kubectl expose deployment rentalservice --type=LoadBalancer              
+```    
+Récupérer l'adresse du service :
+```
+minikube service rentalservice --url                      
+```    
+Tester dans votre navigateur :
+
+http://127.0.0.1:50784/cars
+
+En adaptant l'URL.
+
+### Déployer via des fichiers yaml
+```
+kubectl apply -f deployment.yml           
+```
+
+Le fichier yaml : https://github.com/charroux/st2scl/blob/main/deployment.yml
