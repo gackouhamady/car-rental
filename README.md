@@ -1,4 +1,4 @@
-# car-rental
+# rentalService
 
 ## Car rental service
 
@@ -151,3 +151,73 @@ kubectl apply -f deployment.yml
 ```
 
 Le fichier yaml : https://github.com/charroux/st2scl/blob/main/deployment.yml
+
+## Mettre en place une gateway 
+
+### Install Istio
+https://istio.io/latest/docs/setup/getting-started/
+
+Download Istio (take care at the version 1.17 here).
+
+```
+cd istio-1.17.0    
+export PATH=$PWD/bin:$PATH    
+istioctl install --set profile=demo -y
+cd ..   
+```
+Enable auto-injection of the Istio side-cars when the pods are started:
+```
+kubectl label namespace default istio-injection=enabled
+```
+Install the Istio addons (Kiali, Prometheus, Jaeger, Grafana):
+```
+kubectl apply -f samples/addons
+```
+## 
+Enable auto-injection of the Istio side-cars when the pods are started:
+```
+kubectl label namespace default istio-injection=enabled
+```
+
+Configure Docker so that it uses the Kubernetes cluster:
+```
+minikube docker-env
+eval $(minikube -p minikube docker-env)
+eval $(minikube docker-env)  
+```
+
+### Kubernetes Gateway
+
+Check the configuration at 53: https://github.com/charroux/st2scl/blob/main/deployment.yml
+
+Check also where the Kubernetes service is registered in the gateway at line 72.
+
+Apply again the config:
+```
+kubectl apply -f deployment.yml      
+```
+
+Then get the address of the gateway:
+```
+kubectl -n istio-system port-forward deployment/istio-ingressgateway 31380:8080  
+```
+
+and finally test in your browser:
+http://localhost:31380/rentalservice/cars
+
+### API Gateway
+
+Accéder à la documentation à la norme Open API du service Rest via la gateway
+
+Ajouter la librairie suivante 
+```
+implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+```
+dans les dépendances du projet: https://github.com/charroux/JavaCodingRules/blob/main/build.gradle
+
+Rebuilder le projet, recréer l'image Docker et mettre à jour l'image sur le Docker Hub.
+
+Redéployer le service Kubernetes. La documentation devrait être accessible à l'adresse:
+```
+http://localhost:31380/rentalservice/swagger-ui/index.html
+```
