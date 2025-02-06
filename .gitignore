@@ -35,3 +35,5 @@ out/
  minikube-linux-amd64
 ### VS Code ###
 .vscode/
+istio-1.24.2/
+
